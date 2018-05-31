@@ -1,5 +1,6 @@
 package com.zomo.vphoto.service.imp;
 
+import com.google.common.collect.Lists;
 import com.zomo.vphoto.form.UserForm;
 import com.zomo.vphoto.VO.UserVO;
 import com.zomo.vphoto.common.Const;
@@ -11,6 +12,8 @@ import com.zomo.vphoto.utils.MD5Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImp implements IUserService {
@@ -128,5 +131,20 @@ public class UserServiceImp implements IUserService {
             return ServiceResponse.createErrorMsg("密码修改失败请重新尝试");
         }
         return ServiceResponse.createSuccess();
+    }
+
+    @Override
+    public ServiceResponse findAllUserByRoleId(Integer roleId) {
+        List<User> userList=userRepository.findByRoleId(roleId);
+        if (userList.size()<=0){
+            return ServiceResponse.createErrorMsg("角色错误");
+        }
+        List<UserVO> userVOList=Lists.newArrayList();
+        for (User user : userList) {
+            UserVO userVO=new UserVO();
+            BeanUtils.copyProperties(user,userVO);
+            userVOList.add(userVO);
+        }
+        return ServiceResponse.createSuccess(userVOList);
     }
 }

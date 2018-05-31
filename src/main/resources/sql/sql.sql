@@ -14,6 +14,7 @@ create table `project`(
 `project_content` varchar(256) comment '活动内容',
 `project_content_detail` varchar(1024) comment '活动内容详情',
 `project_create_user_id` int(11) not null comment '创建活动用户id',
+`project_retoucher_id`int(11) comment '修图师ID',
 `project_create_time` timestamp default current_timestamp comment '创建活动时间',
 `project_update_time` timestamp default current_timestamp on update current_timestamp  comment '活动最后修改时间',
 `project_status` int(3) not null comment '活动状态',
@@ -25,6 +26,7 @@ create table `project_detail`(
 `project_id` int(11) not null comment'项目Id',
 `create_time` timestamp default current_timestamp comment'图片上传时间',
 `image_host` varchar(256) not null comment'图片地址',
+`status` int(11) not null comment '图片状态'
 PRIMARY key(`id`)
 )comment '项目详情表'
 

@@ -36,4 +36,6 @@ public class Project {
     private Date projectUpdateTime;
 
     private Date projectTime;
+
+    private Integer projectRetoucherId;
 }

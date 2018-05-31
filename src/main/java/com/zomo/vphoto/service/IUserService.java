@@ -20,4 +20,6 @@ public interface IUserService {
 
     ServiceResponse resetPassword(UserForm userForm,UserVO userVO);
 
+    ServiceResponse findAllUserByRoleId(Integer roleId);
+
 }

@@ -24,4 +24,9 @@ public class HomeController {
     public String resetPassword(){
         return "resetPassword";
     }
+
+    @RequestMapping("/fileupload")
+    public String fileupload(){
+        return "fileupload";
+    }
 }

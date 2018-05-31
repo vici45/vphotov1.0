@@ -12,22 +12,22 @@ public class ServiceResponse<T> {
 
     private T data;
 
-    public ServiceResponse(Integer code, String msg, T data) {
+    private ServiceResponse(Integer code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
-    public ServiceResponse(Integer code) {
+    private ServiceResponse(Integer code) {
         this.code = code;
     }
 
-    public ServiceResponse(Integer code, String msg) {
+    private ServiceResponse(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public ServiceResponse(Integer code, T data) {
+    private ServiceResponse(Integer code, T data) {
         this.code = code;
         this.data = data;
     }
