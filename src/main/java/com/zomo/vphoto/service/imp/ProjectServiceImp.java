@@ -28,7 +28,7 @@ public class ProjectServiceImp implements IProjectService {
     public ServiceResponse findAllProject() {
         List<Project> projectList= (List<Project>) projectRepository.findAll();
         if (projectList.size()<=0){
-            return ServiceResponse.createSuccess("目前没有项目");
+            return ServiceResponse.createErrorMsg("目前没有项目");
         }
         ServiceResponse response=assembleProjectList2ProjectVoList(projectList);
         return response;
@@ -63,7 +63,7 @@ public class ProjectServiceImp implements IProjectService {
     public ServiceResponse findProjectByRetoucherId(UserVO userVO) {
         List<Project> projectList=projectRepository.findByProjectRetoucherId(userVO.getId());
         if (projectList.size()<=0){
-            return ServiceResponse.createSuccess("没有可操作的项目");
+            return ServiceResponse.createErrorMsg("没有可操作的项目");
         }
         ServiceResponse response=assembleProjectList2ProjectVoList(projectList);
         return response;
@@ -110,6 +110,15 @@ public class ProjectServiceImp implements IProjectService {
         project=projectRepository.save(project);
         if (project==null){
             return ServiceResponse.createErrorMsg("更新项目失败");
+        }
+        return ServiceResponse.createSuccess();
+    }
+
+    @Override
+    public ServiceResponse checkProjectPrivilege(Integer projectId, Integer userId) {
+        Project project=projectRepository.findByIdAndProjectRetoucherId(projectId,userId);
+        if (project==null){
+            return ServiceResponse.createErrorMsg("你没有该项目的权限");
         }
         return ServiceResponse.createSuccess();
     }

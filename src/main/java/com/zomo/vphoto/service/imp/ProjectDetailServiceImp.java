@@ -3,6 +3,7 @@ package com.zomo.vphoto.service.imp;
 import com.zomo.vphoto.DTO.QiNiuPutRet;
 import com.zomo.vphoto.common.Const;
 import com.zomo.vphoto.common.ServiceResponse;
+import com.zomo.vphoto.config.WebFileUploadConfig;
 import com.zomo.vphoto.entity.ProjectDetail;
 import com.zomo.vphoto.repository.ProjectDetailRepository;
 import com.zomo.vphoto.service.IProjectDetailService;
@@ -10,14 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProjectDetailImp implements IProjectDetailService {
+public class ProjectDetailServiceImp implements IProjectDetailService {
     @Autowired
     private ProjectDetailRepository projectDetailRepository;
 
 
     @Override
     public ServiceResponse addDetailByProjectId(Integer projectId, QiNiuPutRet ret) {
-        String imageHost=Const.QINIU_CDN_PREFIX+"/"+ret.getKey();
+        String imageHost= Const.QINIU_CDN_PREFIX+ret.getKey();
         ProjectDetail projectDetail=new ProjectDetail();
         projectDetail.setProjectId(projectId);
         projectDetail.setImageHost(imageHost);

@@ -95,7 +95,7 @@
 
       <div class="am-tabs-bd">
 
-        <form class="am-form" th:action="@{/project/addProject.do}" th:method="POST">
+        <form class="am-form" th:action="@{/project/addProject.do}" th:method="POST" enctype="multipart/form-data">
             <div class="am-g am-margin-top">
               <div class="am-u-sm-2 am-text-right">
                 项目名称
@@ -131,7 +131,7 @@
                 项目Banner
               </div>
               <div class="am-u-sm-4">
-                <input type="text" th:name="projectBannerHost" class="am-input-sm"/>
+                <input type="file" th:name="banner" class="am-input-sm"/>
               </div>
               <div class="am-u-sm-6">必填</div>
             </div>
@@ -141,7 +141,7 @@
                 项目主图
               </div>
               <div class="am-u-sm-4">
-                <input type="text" th:name="projectKeyImageHost" class="am-input-sm"/>
+                <input type="file" th:name="keyImage" class="am-input-sm"/>
               </div>
               <div class="am-u-sm-6">必填</div>
             </div>
@@ -174,7 +174,7 @@
                 项目详情
               </div>
               <div class="am-u-sm-10">
-                <textarea rows="10" placeholder="请使用富文本编辑插件"></textarea>
+                <textarea rows="10" th:name="projectContentDetail"></textarea>
               </div>
             </div>
               <div>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- bootstrap 4.x is supported. You can also use the bootstrap css 3.3.x versions -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <!-- if using RTL (Right-To-Left) orientation, load the RTL CSS file after fileinput.css by uncommenting below -->
+    <!-- link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/css/fileinput-rtl.min.css" media="all" rel="stylesheet" type="text/css" /-->
+    <!-- optionally uncomment line below if using a theme or icon set like font awesome (note that default icons used are glyphicons and `fa` theme can override it) -->
+    <!-- link https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css media="all" rel="stylesheet" type="text/css" /-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- piexif.min.js is only needed for restoring exif data in resized images and when you
+        wish to resize images before upload. This must be loaded before fileinput.min.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/piexif.min.js" type="text/javascript"></script>
+    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview.
+        This must be loaded before fileinput.min.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/sortable.min.js" type="text/javascript"></script>
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for
+        HTML files. This must be loaded before fileinput.min.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/plugins/purify.min.js" type="text/javascript"></script>
+    <!-- popper.min.js below is needed if you use bootstrap 4.x. You can also use the bootstrap js
+       3.3.x versions without popper.min.js. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <!-- bootstrap.min.js below is needed if you wish to zoom and preview file content in a detail modal
+        dialog. bootstrap 4.x is supported. You can also use the bootstrap js 3.3.x versions. -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
+    <!-- optionally uncomment line below for loading your theme assets for a theme like Font Awesome (`fa`) -->
+    <!-- script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/themes/fa/theme.min.js"></script -->
+    <!-- optionally if you need translation for your language then include  locale file as mentioned below -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/locales/zh.js"></script>
+
+</head>
+<body>
+<div class="file-loading">
+    <input id="input" name="upload_file" type="file" multiple="multiple"/>
+</div>
+    <input type="hidden" name="projectId" id="projectId" th:value="${projectId}"/>
+<script>
+    $("#input").fileinput({
+
+        language: 'zh', //设置语言
+
+        uploadUrl:"http://localhost:8080/upload/projectDetailFileupload.do", //上传的地址
+
+        allowedFileExtensions: ['jpg', 'gif', 'png'],//接收的文件后缀
+
+        //uploadExtraData:{"id": 1, "fileName":'123.mp3'},
+
+        uploadAsync: true, //默认异步上传
+
+        showUpload:true, //是否显示上传按钮
+
+        showRemove :true, //显示移除按钮
+
+        showPreview :true, //是否显示预览
+
+        showCaption:false,//是否显示标题
+
+        showBrowse:true,
+
+        autoReplace:true,//是否自动替换当前图片
+
+        browseClass:"btn btn-primary", //按钮样式
+
+        dropZoneEnabled: true,//是否显示拖拽区域
+
+        //minImageWidth: 50, //图片的最小宽度
+
+        //minImageHeight: 50,//图片的最小高度
+
+        //maxImageWidth: 1000,//图片的最大宽度
+
+        //maxImageHeight: 1000,//图片的最大高度
+
+        maxFileSize:10000,//单位为kb，如果为0表示不限制文件大小
+
+        //minFileCount: 0,
+
+        maxFileCount:10, //表示允许同时上传的最大文件个数
+
+        enctype:'multipart/form-data',
+
+        validateInitialCount:true,
+
+        previewFileIcon: "",
+
+        msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+
+        uploadExtraData:function () {
+            var projectId=$("#projectId").val();
+                return {'projectId':projectId};
+        }
+
+    }).on("fileuploaded", function (event, data, previewId, index){
+
+
+
+    });
+</script>
+</body>
+</html>

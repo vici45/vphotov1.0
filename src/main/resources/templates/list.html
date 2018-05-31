@@ -107,12 +107,12 @@
           <table class="am-table am-table-striped am-table-hover table-main">
             <thead>
               <tr>
-                <th class="table-check"><input type="checkbox" /></th>
-                <th class="table-id">项目名称</th>
+
+                <th class="table-title">项目名称</th>
                 <th class="table-title">项目地点</th>
-                <th class="table-type">活动时间</th>
+                <th class="table-date">活动时间</th>
                 <th class="table-author">活动内容</th>
-                <th class="table-date">项目创建人</th>
+                <th class="table-text">项目创建人</th>
                 <th class="table-date">项目修图师</th>
                 <th class="table-date">项目状态</th>
                 <th class="table-set">操作</th>
@@ -120,7 +120,6 @@
           </thead>
           <tbody>
           <tr th:each="list,listStatus:${list}">
-              <td><input type="checkbox" /></td>
             <td th:text="${list.projectName}"></td>
             <td th:text="${list.projectSit}"></td>
             <td th:text="${list.projectTime}"></td>
@@ -132,7 +131,7 @@
                 <div class="am-btn-toolbar">
                   <div class="am-btn-group am-btn-group-xs">
                     <a th:href="@{/project/updateProjectPage.do?(projectId=${list.id})}" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 修改</a>
-                    <a class="am-btn am-btn-default am-btn-xs"><span class="am-icon-upload"></span>上传图片</a>
+                    <a th:href="@{/upload/projectDetailFileuploadPage.do?(projectId=${list.id})}" class="am-btn am-btn-default am-btn-xs"><span class="am-icon-upload"></span>上传图片</a>
                     <a th:if="${list.projectStatus==0}" th:href="@{/project/offline.do?(projectId=${list.id})}" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 下架</a>
                     <a th:if="${list.projectStatus==1}" th:href="@{/project/online.do?(projectId=${list.id})}" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 上架</a>
                   </div>

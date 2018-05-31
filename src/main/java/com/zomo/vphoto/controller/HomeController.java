@@ -29,4 +29,9 @@ public class HomeController {
     public String fileupload(){
         return "fileupload";
     }
+
+    @RequestMapping("/bootstrap")
+    public String bootstrap(){
+        return "bootstrap";
+    }
 }

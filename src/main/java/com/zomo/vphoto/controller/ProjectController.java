@@ -1,5 +1,6 @@
 package com.zomo.vphoto.controller;
 
+import com.zomo.vphoto.DTO.QiNiuPutRet;
 import com.zomo.vphoto.VO.UserVO;
 import com.zomo.vphoto.common.Const;
 import com.zomo.vphoto.common.ServiceResponse;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,6 +26,8 @@ public class ProjectController {
     private IProjectService projectService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private FileUploadController fileUploadController;
 
     @RequestMapping(value = "findAll.do",method = RequestMethod.GET)
     public String findAll(HttpSession session, Model model){
@@ -52,13 +57,31 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "addProject.do",method = RequestMethod.POST)
-    public String addProject(HttpSession session, ProjectForm projectForm,Model model){
+    public String addProject(HttpSession session, ProjectForm projectForm,Model model,
+                             @RequestParam(value = "banner", required = false) MultipartFile banner,
+                             @RequestParam(value = "keyImage", required = false) MultipartFile keyImage){
         UserVO userVO= (UserVO) session.getAttribute(Const.CURRENT_USER);
         if (userVO==null){
             model.addAttribute("msg","用户登录超时，请重新登录");
             return "error";
         }
         if (userService.isAdmin(userVO)||userService.isManager(userVO)){
+            ServiceResponse bannerResponse=fileUploadController.uploadFile(banner);
+            if (!bannerResponse.isSuccess()){
+                model.addAttribute("msg",bannerResponse.getMsg());
+                return "error";
+            }
+            QiNiuPutRet bannerRet= (QiNiuPutRet) bannerResponse.getData();
+            String bannerHost=Const.QINIU_CDN_PREFIX+bannerRet.getKey();
+            projectForm.setProjectBannerHost(bannerHost);
+
+            ServiceResponse keyImageResponse=fileUploadController.uploadFile(keyImage);
+            if (!keyImageResponse.isSuccess()){
+                model.addAttribute("msg",keyImageResponse.getMsg());
+            }
+            QiNiuPutRet keyImageRet= (QiNiuPutRet) keyImageResponse.getData();
+            String keyImageHost=Const.QINIU_CDN_PREFIX+keyImageRet.getKey();
+            projectForm.setProjectKeyImageHost(keyImageHost);
             ServiceResponse response=projectService.addProject(projectForm,userVO);
             if (response.isSuccess()){
                 return "success";

@@ -12,4 +12,5 @@ public interface IProjectService {
     ServiceResponse projectOffline(Integer projectId);
     ServiceResponse projectOnline(Integer projectId);
     ServiceResponse updateProject(ProjectForm projectForm);
+    ServiceResponse checkProjectPrivilege(Integer projectId,Integer userId);
 }
