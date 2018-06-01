@@ -4,13 +4,12 @@
 <head>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <title>Amaze后台管理系统模板HTML首页 - cssmoban</title>
+  <title>ZomoVhpoto</title>
   <meta name="description" content="这是一个 index 页面"/>
   <meta name="keywords" content="index"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
   <meta name="renderer" content="webkit"/>
   <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <link rel="icon" type="image/png" href="../assets/i/favicon.png"/>
   <link rel="apple-touch-icon-precomposed" href="../assets/i/app-icon72x72@2x.png"/>
   <meta name="apple-mobile-web-app-title" content="Amaze UI" />
   <link rel="stylesheet" href="../assets/css/amazeui.min.css"/>
@@ -56,8 +55,8 @@
       <li class="admin-parent">
         <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-file"></span> 项目模块 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
         <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
-          <li><a th:href="@{/project/findAll}" class="am-cf"><span class="am-icon-check"></span> 项目总览</a></li>
-          <li><a th:href="@{/addProjectPage}"><span class="am-icon-puzzle-piece"></span> 新建项目</a></li>
+          <li><a th:href="@{/project/findAll.do}" class="am-cf"><span class="am-icon-check"></span> 项目总览</a></li>
+          <li><a th:href="@{/project/addProjectPage.do}"><span class="am-icon-puzzle-piece"></span> 新建项目</a></li>
         </ul>
       </li>
       <li><a th:href="@{/register.html}"><span class="am-icon-table"></span> 用户注册</a></li>
@@ -95,13 +94,14 @@
 
       <div class="am-tabs-bd">
 
-          <form class="am-form" th:action="@{/register.do}" th:method="POST">
+          <form class="am-form" th:action="@{/register.do}"  th:method="POST">
             <div class="am-g am-margin-top">
               <div class="am-u-sm-2 am-text-right">
                 用户名
               </div>
               <div class="am-u-sm-4">
                 <input type="text" th:name="username" class="am-input-sm"/>
+                <td th:if="${#fields.hasErrors('username')}" th:text="${fields.username}"></td>
               </div>
               <div class="am-u-sm-6">必填   默认密码123456</div>
             </div>
@@ -124,6 +124,7 @@
               </div>
               <div class="am-u-sm-4">
                 <input type="text" th:name="name" class="am-input-sm"/>
+                <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}" ></label>
               </div>
               <div class="am-u-sm-6">必填</div>
             </div>

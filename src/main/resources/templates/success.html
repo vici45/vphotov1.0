@@ -3,9 +3,24 @@
 <head>
     <meta charset="utf-8"/>
     <title>Title</title>
+
 </head>
 <body>
 <h1>SUCCESS</h1>
-
+<a th:href="@{index.html}"><span id="sp">3</span>秒后自动跳转到主页,或点击链接返回主页</a>
+<script type="text/javascript">
+    window.onload=function(){
+        setInterval(go, 1000);
+    };
+    var x=3; //利用了全局变量来执行
+    function go(){
+        x--;
+        if(x>0){
+            document.getElementById("sp").innerHTML=x;  //每次设置的x的值都不一样了。
+        }else{
+            location.href='http://localhost:8080/index';
+        }
+    }
+</script>
 </body>
 </html>

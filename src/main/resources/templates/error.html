@@ -6,6 +6,21 @@
 </head>
 <body>
 <h1>ERROR</h1>
+<a th:href="@{index.html}"><span id="sp">5</span>秒后自动跳转到主页,或点击链接返回主页</a>
 <span th:text="${msg}"></span>
 </body>
+<script type="text/javascript">
+    window.onload=function(){
+        setInterval(go, 1000);
+    };
+    var x=5; //利用了全局变量来执行
+    function go(){
+        x--;
+        if(x>0){
+            document.getElementById("sp").innerHTML=x;  //每次设置的x的值都不一样了。
+        }else{
+            location.href='http://localhost:8080/index';
+        }
+    }
+</script>
 </html>

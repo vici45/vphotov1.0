@@ -2,13 +2,14 @@ package com.zomo.vphoto.form;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Data
 public class ProjectForm {
 
     private Integer id;
-
+    @NotNull
     private String projectName;
 
     private String projectSit;

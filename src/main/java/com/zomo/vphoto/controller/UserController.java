@@ -9,11 +9,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -82,13 +84,12 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/register.do",method = RequestMethod.POST)
-    public String userRegister(UserForm userForm, Integer roleId,Model model){
-        if (userForm==null){
-            model.addAttribute("msg","用户信息为空请重新提交");
-            return "register";
-        }
-        if (StringUtils.isEmpty(userForm.getName())){
-            model.addAttribute("msg","名字不能为空");
+    public String userRegister(@Valid  UserForm userForm,
+                               BindingResult result,
+                               @RequestParam(value = "roleId") Integer roleId,
+                               Model model){
+        if (result.hasErrors()){
+            model.addAttribute("fields",result.getFieldErrors());
             return "register";
         }
         if (roleId==1||roleId==2){

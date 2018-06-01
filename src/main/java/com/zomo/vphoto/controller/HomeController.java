@@ -25,13 +25,11 @@ public class HomeController {
         return "resetPassword";
     }
 
-    @RequestMapping("/fileupload")
-    public String fileupload(){
-        return "fileupload";
+
+    @RequestMapping("/test")
+    public String test(){
+        return "test";
     }
 
-    @RequestMapping("/bootstrap")
-    public String bootstrap(){
-        return "bootstrap";
-    }
+
 }

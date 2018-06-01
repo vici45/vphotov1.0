@@ -19,6 +19,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         if (userVO==null){
             PrintWriter pw=response.getWriter();
             pw.write("please login");
+            response.sendRedirect("/login");
             return false;
         }
         return true;
