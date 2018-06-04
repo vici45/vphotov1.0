@@ -9,6 +9,7 @@ import com.zomo.vphoto.entity.User;
 import com.zomo.vphoto.repository.UserRepository;
 import com.zomo.vphoto.service.IUserService;
 import com.zomo.vphoto.utils.MD5Util;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class UserServiceImp implements IUserService {
         if (user==null){
             return ServiceResponse.createSuccess();
         }
-        return ServiceResponse.createError();
+        return ServiceResponse.createErrorMsg("用户名已被占用请重新尝试");
     }
 
     @Override
@@ -54,11 +55,15 @@ public class UserServiceImp implements IUserService {
 
         ServiceResponse response=checkedUsername(userForm.getUsername());
         if (!response.isSuccess()){
-            return ServiceResponse.createErrorMsg("用户名已被占用请重新尝试");
+            return response;
+        }
+        response=checkedName(userForm.getName());
+        if (!response.isSuccess()){
+            return response;
         }
         User user=new User();
         user.setUsername(userForm.getUsername());
-        user.setPassword(MD5Util.MD5EncodeUtf8("123456"));
+        user.setPassword(MD5Util.MD5EncodeUtf8("12345678"));
         user.setRoleId(Const.Role.MANAGER.getCode());
         user.setName(userForm.getName());
         User addUser=userRepository.save(user);
@@ -72,11 +77,15 @@ public class UserServiceImp implements IUserService {
     public ServiceResponse registerUser(UserForm userForm) {
         ServiceResponse response=checkedUsername(userForm.getUsername());
         if (!response.isSuccess()){
-            return ServiceResponse.createErrorMsg("用户名已被占用请重新尝试");
+            return response;
+        }
+        response=checkedName(userForm.getName());
+        if (!response.isSuccess()){
+            return response;
         }
         User user=new User();
         user.setUsername(userForm.getUsername());
-        user.setPassword(MD5Util.MD5EncodeUtf8("123456"));
+        user.setPassword(MD5Util.MD5EncodeUtf8("12345678"));
         user.setRoleId(Const.Role.user.getCode());
         user.setName(userForm.getName());
         User addUser=userRepository.save(user);
@@ -146,5 +155,17 @@ public class UserServiceImp implements IUserService {
             userVOList.add(userVO);
         }
         return ServiceResponse.createSuccess(userVOList);
+    }
+
+    @Override
+    public ServiceResponse checkedName(String name) {
+        if (StringUtils.isEmpty(name)){
+            return ServiceResponse.createErrorMsg("用户名为空验证错误");
+        }
+        User user=userRepository.findByName(name);
+        if (user==null){
+            return ServiceResponse.createSuccess();
+        }
+        return ServiceResponse.createErrorMsg("用户姓名已被注册，请更换");
     }
 }

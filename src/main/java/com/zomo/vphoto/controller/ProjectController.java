@@ -8,15 +8,18 @@ import com.zomo.vphoto.entity.Project;
 import com.zomo.vphoto.form.ProjectForm;
 import com.zomo.vphoto.service.IProjectService;
 import com.zomo.vphoto.service.IUserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 
 @Controller
@@ -57,7 +60,10 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "addProject.do",method = RequestMethod.POST)
-    public String addProject(HttpSession session, ProjectForm projectForm,Model model,
+    public String addProject(@Valid ProjectForm projectForm,
+                             BindingResult result,
+                             Model model,
+                             HttpSession session,
                              @RequestParam(value = "banner", required = false) MultipartFile banner,
                              @RequestParam(value = "keyImage", required = false) MultipartFile keyImage){
         UserVO userVO= (UserVO) session.getAttribute(Const.CURRENT_USER);
@@ -65,7 +71,11 @@ public class ProjectController {
             model.addAttribute("msg","用户登录超时，请重新登录");
             return "error";
         }
-        if (userService.isAdmin(userVO)||userService.isManager(userVO)){
+            if (userService.isAdmin(userVO)||userService.isManager(userVO)){
+            if (result.hasErrors()){
+                model.addAttribute("msg",result.getAllErrors().get(0).getDefaultMessage());
+                return "forward:/project/addProjectPage.do";
+            }
             ServiceResponse bannerResponse=fileUploadController.uploadFile(banner);
             if (!bannerResponse.isSuccess()){
                 model.addAttribute("msg",bannerResponse.getMsg());
@@ -96,7 +106,7 @@ public class ProjectController {
 
     }
 
-    @RequestMapping(value = "addProjectPage.do",method = RequestMethod.GET)
+    @RequestMapping(value = "addProjectPage.do")
     public String addProjectPage(HttpSession session,Model model){
         UserVO userVO= (UserVO) session.getAttribute(Const.CURRENT_USER);
         if (userVO==null){

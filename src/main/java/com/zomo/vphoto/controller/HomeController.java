@@ -25,10 +25,14 @@ public class HomeController {
         return "resetPassword";
     }
 
-
     @RequestMapping("/test")
     public String test(){
         return "test";
+    }
+
+    @RequestMapping("/project/addProject")
+    public String addProject(){
+        return "addProject";
     }
 
 

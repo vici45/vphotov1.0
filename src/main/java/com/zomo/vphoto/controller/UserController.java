@@ -87,9 +87,16 @@ public class UserController {
     public String userRegister(@Valid  UserForm userForm,
                                BindingResult result,
                                @RequestParam(value = "roleId") Integer roleId,
-                               Model model){
-        if (result.hasErrors()){
-            model.addAttribute("fields",result.getFieldErrors());
+                               Model model,
+                               HttpSession session){
+        UserVO userVO= (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if (!(userService.isManager(userVO)||userService.isAdmin(userVO)))
+        {
+            model.addAttribute("msg","你没有权限注册用户");
+            return "error";
+        }
+            if (result.hasErrors()){
+            model.addAttribute("msg",result.getAllErrors().get(0).getDefaultMessage());
             return "register";
         }
         if (roleId==1||roleId==2){
@@ -114,23 +121,18 @@ public class UserController {
     }
 
     @RequestMapping(value="resetPassword.do",method = RequestMethod.POST)
-    public String resetPassword(UserForm userForm,HttpSession session,Model model){
+    public String resetPassword(@Valid UserForm userForm,
+                                BindingResult result,
+                                HttpSession session,
+                                Model model){
+        if(result.hasErrors()){
+            model.addAttribute("msg",result.getAllErrors().get(0).getDefaultMessage());
+            return "resetPassword";
+        }
         UserVO userVO= (UserVO) session.getAttribute(Const.CURRENT_USER);
         if (userVO==null){
             model.addAttribute("msg","用户登录信息失效请重新登录");
             return "error";
-        }
-        if (StringUtils.isEmpty(userForm.getPassword())){
-            model.addAttribute("msg","密码不能为空，请重新输入");
-            return "resetPassword";
-        }
-        if (StringUtils.isEmpty(userForm.getResetPassword())){
-            model.addAttribute("msg","新密码不能为空，请重新输入");
-            return "resetPassword";
-        }
-        if (StringUtils.isEmpty(userForm.getRepeatPassword())){
-            model.addAttribute("msg","确认密码不能为空，请重新输入");
-            return "resetPassword";
         }
         if(!userForm.getRepeatPassword().equals(userForm.getResetPassword())){
             model.addAttribute("msg","密码不一致请重新输入，请重新输入");

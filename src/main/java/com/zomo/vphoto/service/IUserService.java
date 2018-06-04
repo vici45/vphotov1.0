@@ -22,4 +22,6 @@ public interface IUserService {
 
     ServiceResponse findAllUserByRoleId(Integer roleId);
 
+    ServiceResponse checkedName(String name);
+
 }

@@ -13,9 +13,9 @@
 
 </head>
 
-<body class="login" mycollectionplug="bind">
+<body class="login" mycollectionplug="bind" style="align-self: center">
 <div class="login_m">
-    <div class="login_logo"><img src="/Wopop_files/zomo.png" width="382" height="184"/></div>
+    <div class="login_logo" style=" text-align: center"><img src="/Wopop_files/zomo.png" width="350" height="143"/></div>
     <div class="login_boder">
         <form id="loginForm" th:action="@{/login.do}" th:method="POST">
         <div class="login_padding" id="login_model">
@@ -34,7 +34,7 @@
             </label>
 
 
-            <p class="forgot" ><span th:text="${msg}"></span></p>
+            <p class="forgot" ><span th:text="${msg}"  style="color: red"></span></p>
             <div class="rem_sub">
                 <div class="rem_sub_l">
                     <!--<label ><a>register</a></label>-->
@@ -55,4 +55,13 @@
 
 
 </body>
+<script type="text/javascript">
+    window.onload=function(){
+        al();
+    };
+    function al() {
+        var a=httpSession.getAttribute("user").getName();
+        alert(a)
+    }
+</script>
 </html>
