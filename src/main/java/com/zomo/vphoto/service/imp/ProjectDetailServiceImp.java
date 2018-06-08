@@ -10,6 +10,8 @@ import com.zomo.vphoto.service.IProjectDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class ProjectDetailServiceImp implements IProjectDetailService {
     @Autowired
@@ -19,10 +21,14 @@ public class ProjectDetailServiceImp implements IProjectDetailService {
     @Override
     public ServiceResponse addDetailByProjectId(Integer projectId, QiNiuPutRet ret) {
         String imageHost= Const.QINIU_CDN_PREFIX+ret.getKey();
+        Integer fsize=ret.getFsize();
+        BigDecimal b=new BigDecimal((float)fsize/1048576);
+        String size=b.setScale(1,BigDecimal.ROUND_HALF_UP).toString()+"M";
         ProjectDetail projectDetail=new ProjectDetail();
         projectDetail.setProjectId(projectId);
         projectDetail.setImageHost(imageHost);
         projectDetail.setStatus(Const.DetailStatus.ONLINE.getCode());
+        projectDetail.setSize(size);
         projectDetail=projectDetailRepository.save(projectDetail);
         if (projectDetail==null){
             return ServiceResponse.createErrorMsg("上传文件失败，请重新尝试");

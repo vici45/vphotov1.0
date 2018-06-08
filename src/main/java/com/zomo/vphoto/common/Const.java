@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 public class Const {
     public static final String CURRENT_USER="user";
 
-    public static final String QINIU_CDN_PREFIX="http://p9fi43dai.bkt.clouddn.com/";
+    public static final String QINIU_CDN_PREFIX="http://image.zomo-studio.com/";
 
     @Getter
     public enum Role{

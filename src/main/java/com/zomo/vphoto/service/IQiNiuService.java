@@ -10,7 +10,7 @@ public interface IQiNiuService {
 
     Response fileUpload(File file) throws QiniuException;
 
-    Response fileUpload(InputStream inputStream) throws QiniuException;
+    Response fileUpload(InputStream inputStream,String originFileName) throws QiniuException;
 
     Response delete(String key) throws QiniuException;
 }

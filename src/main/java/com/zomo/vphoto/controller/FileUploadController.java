@@ -78,7 +78,7 @@ public class FileUploadController {
         String originFileName = file.getOriginalFilename();
         try {
             InputStream inputStream = file.getInputStream();
-            Response response = qiNiuService.fileUpload(inputStream);
+            Response response = qiNiuService.fileUpload(inputStream,originFileName);
             if (response.isOK()) {
                 QiNiuPutRet ret = gson.fromJson(response.bodyString(), QiNiuPutRet.class);
                 ServiceResponse serviceResponse = projectDetailService.addDetailByProjectId(projectId, ret);
@@ -102,9 +102,10 @@ public class FileUploadController {
         if (file.isEmpty()){
             return ServiceResponse.createErrorMsg("上传文件为空");
         }
+        String originFileName=file.getOriginalFilename();
         try {
             InputStream inputStream = file.getInputStream();
-            Response response = qiNiuService.fileUpload(inputStream);
+            Response response = qiNiuService.fileUpload(inputStream,originFileName);
             if (response.isOK()) {
                 QiNiuPutRet ret = gson.fromJson(response.bodyString(), QiNiuPutRet.class);
                 return ServiceResponse.createSuccess(ret);

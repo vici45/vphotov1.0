@@ -18,4 +18,5 @@ public class ProjectDetail {
     private Date createTime;
     private String imageHost;
     private Integer status;
+    private String size;
 }

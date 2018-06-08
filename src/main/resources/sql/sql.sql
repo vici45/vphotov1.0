@@ -4,6 +4,16 @@ create table `role`(
 PRIMARY key (`id`)
 )comment '角色表'
 
+
+create table `user`(
+`id` int(11) not null AUTO_INCREMENT,
+`username` varchar(64) not null comment '用户名',
+`password` varchar(64) not null comment '密码',
+`name` varchar(64) not null comment '用户姓名',
+`role_id` int(3) not null comment '角色id',
+PRIMARY key(`id`)
+)comment '用户表'
+
 create table `project`(
 `id` int(11) not null AUTO_INCREMENT,
 `project_name` varchar(256) not null comment '项目名称',
@@ -26,7 +36,8 @@ create table `project_detail`(
 `project_id` int(11) not null comment'项目Id',
 `create_time` timestamp default current_timestamp comment'图片上传时间',
 `image_host` varchar(256) not null comment'图片地址',
-`status` int(11) not null comment '图片状态'
+`status` int(11) not null comment '图片状态',
+`size` varchar(32) not null comment '图片大小',
 PRIMARY key(`id`)
 )comment '项目详情表'
 

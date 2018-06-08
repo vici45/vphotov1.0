@@ -34,7 +34,7 @@
 </head>
 <body>
 <div class="file-loading">
-    <input id="input" name="upload_file" type="file" multiple="multiple" data-min-file-count="3"/>
+    <input id="input" name="upload_file" type="file" multiple="multiple" data-min-file-count="2"/>
 </div>
     <input type="hidden" name="projectId" id="projectId" th:value="${projectId}"/>
 <script>
@@ -94,9 +94,6 @@
         }
 
     }).on("fileuploaded", function (event, data, previewId, index){
-
-
-
     });
 </script>
 </body>
