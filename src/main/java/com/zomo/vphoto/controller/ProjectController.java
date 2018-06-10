@@ -76,22 +76,34 @@ public class ProjectController {
                 model.addAttribute("msg",result.getAllErrors().get(0).getDefaultMessage());
                 return "forward:/project/addProjectPage.do";
             }
-            ServiceResponse bannerResponse=fileUploadController.uploadFile(banner);
-            if (!bannerResponse.isSuccess()){
-                model.addAttribute("msg",bannerResponse.getMsg());
-                return "error";
-            }
-            QiNiuPutRet bannerRet= (QiNiuPutRet) bannerResponse.getData();
-            String bannerHost=Const.QINIU_CDN_PREFIX+bannerRet.getKey();
-            projectForm.setProjectBannerHost(bannerHost);
+           /* if (!banner.isEmpty()) {
+                ServiceResponse bannerResponse = fileUploadController.uploadFile(banner);
+                if (!bannerResponse.isSuccess()) {
+                    model.addAttribute("msg", bannerResponse.getMsg());
+                    return "error";
+                }
+                QiNiuPutRet bannerRet = (QiNiuPutRet) bannerResponse.getData();
+                String bannerHost = Const.QINIU_CDN_PREFIX + bannerRet.getKey();
+                projectForm.setProjectBannerHost(bannerHost);
+            }*/
 
-            ServiceResponse keyImageResponse=fileUploadController.uploadFile(keyImage);
+      /*      ServiceResponse keyImageResponse=fileUploadController.uploadFile(keyImage);
             if (!keyImageResponse.isSuccess()){
                 model.addAttribute("msg",keyImageResponse.getMsg());
             }
             QiNiuPutRet keyImageRet= (QiNiuPutRet) keyImageResponse.getData();
             String keyImageHost=Const.QINIU_CDN_PREFIX+keyImageRet.getKey();
-            projectForm.setProjectKeyImageHost(keyImageHost);
+            projectForm.setProjectKeyImageHost(keyImageHost);*/
+             ServiceResponse bannerResponse=formFileUpload(projectForm,banner,Const.FORM_IMAGE_TYPE_BANNER);
+                if (!bannerResponse.isSuccess()){
+                    model.addAttribute("msg",bannerResponse.getMsg());
+                    return "error";
+                }
+             ServiceResponse keyImageResponse=formFileUpload(projectForm,keyImage,Const.FORM_IMAGE_TYPE_KEYIAMGE);
+                if (!keyImageResponse.isSuccess()){
+                    model.addAttribute("msg",keyImageResponse.getMsg());
+                    return "error";
+                }
             ServiceResponse response=projectService.addProject(projectForm,userVO);
             if (response.isSuccess()){
                 return "success";
@@ -204,25 +216,15 @@ public class ProjectController {
             return "error";
         }
         if (userService.isAdmin(userVO) || userService.isManager(userVO)) {
-            if (!newBanner.isEmpty()){
-                ServiceResponse responseNewBanner=fileUploadController.uploadFile(newBanner);
-                if (!responseNewBanner.isSuccess()){
-                    model.addAttribute("msg",responseNewBanner.getMsg());
-                    return "error";
-                }
-                QiNiuPutRet newBannerRet= (QiNiuPutRet) responseNewBanner.getData();
-                String bannerHost=Const.QINIU_CDN_PREFIX+newBannerRet.getKey();
-                projectForm.setProjectBannerHost(bannerHost);
+            ServiceResponse bannerResponse=formFileUpload(projectForm,newBanner,Const.FORM_IMAGE_TYPE_BANNER);
+            if (!bannerResponse.isSuccess()){
+                model.addAttribute("msg",bannerResponse.getMsg());
+                return "error";
             }
-            if (!newKeyImage.isEmpty()){
-                ServiceResponse responseNewKeyImage=fileUploadController.uploadFile(newKeyImage);
-                if (!responseNewKeyImage.isSuccess()){
-                    model.addAttribute("msg",responseNewKeyImage.getMsg());
-                    return "error";
-                }
-                QiNiuPutRet newKeyImageRet= (QiNiuPutRet) responseNewKeyImage.getData();
-                String keyImageHost=Const.QINIU_CDN_PREFIX+newKeyImageRet.getKey();
-                projectForm.setProjectKeyImageHost(keyImageHost);
+            ServiceResponse keyImageResponse=formFileUpload(projectForm,newKeyImage,Const.FORM_IMAGE_TYPE_KEYIAMGE);
+            if (!keyImageResponse.isSuccess()){
+                model.addAttribute("msg",keyImageResponse.getMsg());
+                return "error";
             }
             ServiceResponse response=projectService.updateProject(projectForm);
             if (response.isSuccess()){
@@ -244,6 +246,29 @@ public class ProjectController {
             return response;
         }
         return ServiceResponse.createErrorMsg("你没有权限这么做");
+    }
+
+    private ServiceResponse formFileUpload(ProjectForm projectForm,MultipartFile file,String formImageType){
+        if (file.isEmpty()){
+            return ServiceResponse.createSuccess();
+        }
+        ServiceResponse response=fileUploadController.uploadFile(file);
+        if (!response.isSuccess()){
+            return response;
+        }
+        if (formImageType.equals(Const.FORM_IMAGE_TYPE_BANNER)){
+            QiNiuPutRet bannerRet= (QiNiuPutRet) response.getData();
+            projectForm.setProjectBannerHost(Const.QINIU_CDN_PREFIX+bannerRet.getKey());
+            return ServiceResponse.createSuccess();
+        }
+        if (formImageType.equals(Const.FORM_IMAGE_TYPE_KEYIAMGE)){
+            QiNiuPutRet keyImageRet= (QiNiuPutRet) response.getData();
+            projectForm.setProjectKeyImageHost(Const.QINIU_CDN_PREFIX+keyImageRet.getKey());
+            return ServiceResponse.createSuccess();
+        }
+        return ServiceResponse.createErrorMsg("图片类型错误");
+
+
     }
 
 }

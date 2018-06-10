@@ -131,7 +131,10 @@
               <div class="am-u-sm-2 am-text-right">
                 项目Banner
               </div>
-              <div class="am-u-sm-4">
+              <div class="am-u-sm-4" th:if="${project.projectBannerHost==null}">
+                <p th:text="该项目没有上传banner" class="am-input-sm"/>
+              </div>
+              <div th:if="${project.projectBannerHost!=null}" class="am-u-sm-4">
                 <input type="hidden" th:name="projectBannerHost"  th:value="${project.projectBannerHost}"  class="am-input-sm"/>
                 <img  th:name="projectBannerHost" th:value="${project.projectBannerHost}" th:src="${project.projectBannerHost}" style="width: 200px;height: 150px" class="am-input-sm"/>
               </div>
@@ -141,6 +144,7 @@
           <div class="am-g am-margin-top">
             <div class="am-u-sm-2 am-text-right">&nbsp
             </div>
+
             <div class="am-u-sm-4">
               <input type="file" th:name="newBanner" class="am-input-sm"/>
             </div>
@@ -151,7 +155,10 @@
               <div class="am-u-sm-2 am-text-right">
                 项目主图
               </div>
-              <div class="am-u-sm-4">
+              <div class="am-u-sm-4" th:if="${project.projectKeyImageHost==null}">
+                <p th:text="该项目没有上传主图" class="am-input-sm"/>
+              </div>
+              <div class="am-u-sm-4" th:if="${project.projectKeyImageHost!=null}">
                 <input type="hidden" th:name="projectKeyImageHost"  th:value="${project.projectKeyImageHost}"  class="am-input-sm"/>
                 <img th:name="projectKeyImageHost" th:src="${project.projectKeyImageHost}" th:value="${project.projectKeyImageHost}" style="width: 200px;height: 150px" class="am-input-sm"/>
               </div>

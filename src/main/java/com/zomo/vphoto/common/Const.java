@@ -9,6 +9,10 @@ public class Const {
 
     public static final String QINIU_CDN_PREFIX="http://image.zomo-studio.com/";
 
+    public static final String FORM_IMAGE_TYPE_BANNER="banner";
+
+    public static final String FORM_IMAGE_TYPE_KEYIAMGE="keyImage";
+
     @Getter
     public enum Role{
         ADMIN(0,"admin"),
