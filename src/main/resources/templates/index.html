@@ -90,7 +90,7 @@
             <li><a href="#" class="am-text-success"><span class="am-icon-btn am-icon-file-text"></span><br/>总项目数量<br/>2300</a></li>
             <li><a href="#" class="am-text-warning"><span class="am-icon-btn am-icon-briefcase"></span><br/>总访问量<br/>308</a></li>
             <li><a href="#" class="am-text-danger"><span class="am-icon-btn am-icon-recycle"></span><br/>当日访问量<br/>80082</a></li>
-            <li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-user-md"></span><br/>XXXX<br/>3000</a></li>
+            <li th:if="${session.user.roleId==0}"><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-user-md"></span><br/>总用户量<br/>3000</a></li>
         </ul>
 
     </div>
@@ -116,5 +116,22 @@
 <script src="assets/js/amazeui.min.js"></script>
 <!--<![endif]-->
 <script src="assets/js/app.js"></script>
+
+<script type="text/javascript">
+    window.onload=function () {
+        $.ajax(
+            {   type:"GEt",
+                url:"http://192.168.1.114:8080/project/findAllProjectSize.do",
+                data:{},
+                dataType:"json",
+                success:function (data) {
+                    alert(data);
+                }
+
+
+            }
+        )
+    };
+</script>
 </body>
 </html>

@@ -20,7 +20,7 @@ public class ProjectDetailServiceImp implements IProjectDetailService {
 
     @Override
     public ServiceResponse addDetailByProjectId(Integer projectId, QiNiuPutRet ret) {
-        String imageHost= Const.QINIU_CDN_PREFIX+ret.getKey();
+        String imageHost= ret.getKey();
         Integer fsize=ret.getFsize();
         BigDecimal b=new BigDecimal((float)fsize/1048576);
         String size=b.setScale(1,BigDecimal.ROUND_HALF_UP).toString()+"M";

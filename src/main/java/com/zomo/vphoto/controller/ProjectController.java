@@ -195,13 +195,35 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "updateProject.do",method = RequestMethod.POST)
-    public String updateProject(ProjectForm projectForm,HttpSession session,Model model){
+    public String updateProject(ProjectForm projectForm,HttpSession session,Model model,
+                                @RequestParam(value = "newBanner", required = false) MultipartFile newBanner,
+                                @RequestParam(value = "newKeyImage", required = false) MultipartFile newKeyImage){
         UserVO userVO = (UserVO) session.getAttribute(Const.CURRENT_USER);
         if (userVO == null) {
             model.addAttribute("msg", "用户登录超时，请重新登录");
             return "error";
         }
         if (userService.isAdmin(userVO) || userService.isManager(userVO)) {
+            if (!newBanner.isEmpty()){
+                ServiceResponse responseNewBanner=fileUploadController.uploadFile(newBanner);
+                if (!responseNewBanner.isSuccess()){
+                    model.addAttribute("msg",responseNewBanner.getMsg());
+                    return "error";
+                }
+                QiNiuPutRet newBannerRet= (QiNiuPutRet) responseNewBanner.getData();
+                String bannerHost=Const.QINIU_CDN_PREFIX+newBannerRet.getKey();
+                projectForm.setProjectBannerHost(bannerHost);
+            }
+            if (!newKeyImage.isEmpty()){
+                ServiceResponse responseNewKeyImage=fileUploadController.uploadFile(newKeyImage);
+                if (!responseNewKeyImage.isSuccess()){
+                    model.addAttribute("msg",responseNewKeyImage.getMsg());
+                    return "error";
+                }
+                QiNiuPutRet newKeyImageRet= (QiNiuPutRet) responseNewKeyImage.getData();
+                String keyImageHost=Const.QINIU_CDN_PREFIX+newKeyImageRet.getKey();
+                projectForm.setProjectKeyImageHost(keyImageHost);
+            }
             ServiceResponse response=projectService.updateProject(projectForm);
             if (response.isSuccess()){
                 return "success";
@@ -213,6 +235,15 @@ public class ProjectController {
         model.addAttribute("msg","你没有权限修改");
         return "error";
 
+    }
+    @RequestMapping(value = "findAllProjectSize.do",method = RequestMethod.POST)
+    public ServiceResponse findAllProjectSize(HttpSession session){
+        UserVO userVO= (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if (userService.isAdmin(userVO)&&userService.isManager(userVO)){
+            ServiceResponse response=projectService.findAllProjectSize();
+            return response;
+        }
+        return ServiceResponse.createErrorMsg("你没有权限这么做");
     }
 
 }

@@ -78,7 +78,7 @@ public class FileUploadController {
         String originFileName = file.getOriginalFilename();
         try {
             InputStream inputStream = file.getInputStream();
-            Response response = qiNiuService.fileUpload(inputStream,originFileName);
+            Response response = qiNiuService.fileUpload(inputStream,originFileName,projectId);
             if (response.isOK()) {
                 QiNiuPutRet ret = gson.fromJson(response.bodyString(), QiNiuPutRet.class);
                 ServiceResponse serviceResponse = projectDetailService.addDetailByProjectId(projectId, ret);

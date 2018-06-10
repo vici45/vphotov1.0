@@ -13,4 +13,5 @@ public interface IProjectService {
     ServiceResponse projectOnline(Integer projectId);
     ServiceResponse updateProject(ProjectForm projectForm);
     ServiceResponse checkProjectPrivilege(Integer projectId,Integer userId);
+    ServiceResponse findAllProjectSize();
 }

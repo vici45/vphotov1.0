@@ -43,7 +43,19 @@ public class QiNiuServiceImp implements IQiNiuService,InitializingBean {
     }
 
     @Override
-    public Response fileUpload(InputStream inputStream,String originFileName) throws QiniuException {
+    public Response fileUpload(InputStream inputStream,String originFileName,Integer projectId) throws QiniuException {
+        String key=projectId.toString()+"/"+originFileName;
+        Response response=this.uploadManager.put(inputStream,key,getUploadToken(),null,null);
+        int retry=0;
+        while (response.needRetry()&&retry<3){
+            response=this.uploadManager.put(inputStream,key,getUploadToken(),null,null);
+            retry++;
+        }
+        return response;
+    }
+
+    @Override
+    public Response fileUpload(InputStream inputStream, String originFileName) throws QiniuException {
         String suffix=originFileName.substring(originFileName.lastIndexOf(".")+1);
         String key=UUID.randomUUID().toString()+"."+suffix;
         Response response=this.uploadManager.put(inputStream,key,getUploadToken(),null,null);

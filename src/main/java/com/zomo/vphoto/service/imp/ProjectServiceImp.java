@@ -123,6 +123,15 @@ public class ProjectServiceImp implements IProjectService {
         return ServiceResponse.createSuccess();
     }
 
+    @Override
+    public ServiceResponse findAllProjectSize() {
+        List<Project> projectList= (List<Project>) projectRepository.findAll();
+        if (projectList.size()>=0){
+            return ServiceResponse.createSuccess(projectList.size());
+        }
+        return ServiceResponse.createErrorMsg("查询错误");
+    }
+
     private ServiceResponse assembleProjectList2ProjectVoList(List<Project> projectList){
         List<ProjectVO> projectVOList=Lists.newArrayList();
         for (Project project : projectList) {
