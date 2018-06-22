@@ -28,6 +28,7 @@ create table `project`(
 `project_create_time` timestamp default current_timestamp comment '创建活动时间',
 `project_update_time` timestamp default current_timestamp on update current_timestamp  comment '活动最后修改时间',
 `project_status` int(3) not null comment '活动状态',
+`project_code_host` varchar(256) comment '微信二维码地址'
  primary key(`id`)
 )comment '项目表'
 

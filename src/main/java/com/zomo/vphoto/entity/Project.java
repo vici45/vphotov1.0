@@ -38,4 +38,6 @@ public class Project {
     private Date projectTime;
 
     private Integer projectRetoucherId;
+
+    private String projectCodeHost;
 }

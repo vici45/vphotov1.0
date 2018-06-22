@@ -4,11 +4,9 @@ import com.zomo.vphoto.DTO.QiNiuPutRet;
 import com.zomo.vphoto.VO.UserVO;
 import com.zomo.vphoto.common.Const;
 import com.zomo.vphoto.common.ServiceResponse;
-import com.zomo.vphoto.entity.Project;
 import com.zomo.vphoto.form.ProjectForm;
 import com.zomo.vphoto.service.IProjectService;
 import com.zomo.vphoto.service.IUserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,7 +63,7 @@ public class ProjectController {
                              Model model,
                              HttpSession session,
                              @RequestParam(value = "banner", required = false) MultipartFile banner,
-                             @RequestParam(value = "keyImage", required = false) MultipartFile keyImage){
+                             @RequestParam(value = "keyImage", required = false) MultipartFile keyImage) throws Exception {
         UserVO userVO= (UserVO) session.getAttribute(Const.CURRENT_USER);
         if (userVO==null){
             model.addAttribute("msg","用户登录超时，请重新登录");

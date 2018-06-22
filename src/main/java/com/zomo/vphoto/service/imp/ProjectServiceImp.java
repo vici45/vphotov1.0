@@ -1,6 +1,9 @@
 package com.zomo.vphoto.service.imp;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.qiniu.http.Response;
+import com.zomo.vphoto.DTO.QiNiuPutRet;
 import com.zomo.vphoto.VO.ProjectVO;
 import com.zomo.vphoto.VO.UserVO;
 import com.zomo.vphoto.common.Const;
@@ -11,11 +14,14 @@ import com.zomo.vphoto.form.ProjectForm;
 import com.zomo.vphoto.repository.ProjectRepository;
 import com.zomo.vphoto.repository.UserRepository;
 import com.zomo.vphoto.service.IProjectService;
+import com.zomo.vphoto.service.IQiNiuService;
+import com.zomo.vphoto.utils.QRCodeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 
 @Service
@@ -24,6 +30,10 @@ public class ProjectServiceImp implements IProjectService {
     private ProjectRepository projectRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private IQiNiuService qiNiuService;
+    @Autowired
+    private Gson gson;
     @Override
     public ServiceResponse findAllProject() {
         List<Project> projectList= (List<Project>) projectRepository.findAll();
@@ -47,7 +57,7 @@ public class ProjectServiceImp implements IProjectService {
 
 
     @Override
-    public ServiceResponse addProject(ProjectForm projectForm, UserVO userVO) {
+    public ServiceResponse addProject(ProjectForm projectForm, UserVO userVO) throws Exception {
         Project project=new Project();
         BeanUtils.copyProperties(projectForm,project);
         project.setProjectCreateUserId(userVO.getId());
@@ -56,6 +66,7 @@ public class ProjectServiceImp implements IProjectService {
         if (project==null){
             return ServiceResponse.createErrorMsg("添加项目失败请重试");
         }
+        addQRCodeHostByProjectId(project.getId());
         return ServiceResponse.createSuccess();
     }
 
@@ -130,6 +141,25 @@ public class ProjectServiceImp implements IProjectService {
             return ServiceResponse.createSuccess(projectList.size());
         }
         return ServiceResponse.createErrorMsg("查询错误");
+    }
+
+    @Override
+    public ServiceResponse addQRCodeHostByProjectId(Integer id) throws Exception {
+        String url="http://vphoto.zomo-studio.com/findByIdPage/"+id;
+        String path=QRCodeUtils.encode(url,"logo.png","qr",true);
+        File file=new File(path);
+        Response response=qiNiuService.fileUpload(file);
+        if (response.isOK()){
+            QiNiuPutRet ret=gson.fromJson(response.bodyString(),QiNiuPutRet.class);
+            String codeHost=Const.QINIU_CDN_PREFIX+ret.getKey();
+            Integer result=projectRepository.updateCodeHostById(id,codeHost);
+            if (result==1){
+               return ServiceResponse.createSuccess();
+            }else {
+                return ServiceResponse.createErrorMsg("生成二维码失败");
+            }
+        }
+        return ServiceResponse.createErrorMsg("生成二维码失败");
     }
 
     private ServiceResponse assembleProjectList2ProjectVoList(List<Project> projectList){

@@ -25,4 +25,6 @@ public class ProjectVO {
 
     private String projectRetoucherName;
 
+    private String projectCodeHost;
+
 }
