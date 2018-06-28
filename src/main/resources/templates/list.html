@@ -133,7 +133,7 @@
                     <a th:href="@{/upload/projectDetailFileuploadPage.do?(projectId=${list.id})}" class="am-btn am-btn-default am-btn-xs" target="_blank"><span class="am-icon-upload"></span>上传图片</a>
                     <a th:if="${list.projectStatus==0}" th:href="@{/project/offline.do?(projectId=${list.id})}" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 下架</a>
                     <a th:if="${list.projectStatus==1}" th:href="@{/project/online.do?(projectId=${list.id})}" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 上架</a>
-                    <a th:href="@{http://vphoto.zomo-studio.com/findByIdPage?(id=${list.id})}" class="am-btn am-btn-default am-btn-xs" target="_blank"><span class="am-icon-picture-o"></span>展示页面</a>
+                    <a th:href="@{http://vphoto.zomo-studio.com/findByIdPage/__${list.id}__}" class="am-btn am-btn-default am-btn-xs" target="_blank"><span class="am-icon-picture-o"></span>展示页面</a>
                     <a th:href="${list.projectCodeHost}" class="am-btn am-btn-default am-btn-xs" target="_blank"><span class="am-icon-picture-o"></span>生成二维码</a>
                   </div>
                 </div>
