@@ -97,6 +97,7 @@
 
         <form class="am-form" th:action="@{/project/updateProject.do}" th:method="POST" enctype="multipart/form-data">
           <input th:type="hidden" th:name="id" th:value="${project.id}"/>
+          <input th:type="hidden" th:name="projectCodeHost" th:value="${project.projectCodeHost}"/>
             <div class="am-g am-margin-top">
               <div class="am-u-sm-2 am-text-right">
                 项目名称

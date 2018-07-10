@@ -14,7 +14,7 @@ public class QRCodeController {
     @RequestMapping(value = "/getQRCode")
     public String getQRCode(String id, HttpServletResponse response) throws Exception {
         String url="http://vphoto.zomo-studio.com/findByIdPage/"+id;
-        BufferedImage image=QRCodeUtils.createImage(url,"classpth:logo.png",true);
+        BufferedImage image=QRCodeUtils.createImage(url,"logo.png",true);
         ImageIO.write(image,"JPEG",response.getOutputStream());
         return "QRCode";
 
